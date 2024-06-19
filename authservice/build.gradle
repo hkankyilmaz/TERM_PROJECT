@@ -25,6 +25,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.745'
+    implementation 'org.socialsignin:spring-data-dynamodb:4.2.1'
+    implementation 'com.github.derjust:spring-data-dynamodb:1.0.5'
 }
 
 tasks.named('test') {
