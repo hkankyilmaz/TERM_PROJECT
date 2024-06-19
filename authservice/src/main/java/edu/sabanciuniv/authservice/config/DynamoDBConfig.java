@@ -1,6 +1,5 @@
 package edu.sabanciuniv.authservice.config;
 
-
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
 @Configuration
 @EnableDynamoDBRepositories
-        (basePackages = "com.customer.auth.repository")
+        (basePackages = "edu.sabanciuniv.authservice.repo")
 public class DynamoDBConfig {
 
 
