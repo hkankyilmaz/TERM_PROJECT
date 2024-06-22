@@ -13,9 +13,9 @@ public class UserRepository {
     @Autowired
     private DynamoDBMapper dynamoDBMapper;
 
-    public String createUser(User user){
+    public User save(User user){
         dynamoDBMapper.save(user);
-        return user.getUsername();
+        return user;
     }
 
     public User getUserById(String id){
