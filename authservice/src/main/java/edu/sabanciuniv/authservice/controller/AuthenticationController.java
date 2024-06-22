@@ -1,25 +1,38 @@
 package edu.sabanciuniv.authservice.controller;
 
+import edu.sabanciuniv.authservice.dto.AuthRequest;
+import edu.sabanciuniv.authservice.dto.CreateUserRequest;
 import edu.sabanciuniv.authservice.model.Token;
 import edu.sabanciuniv.authservice.model.User;
-import edu.sabanciuniv.authservice.service.AuthenticationService;
+import edu.sabanciuniv.authservice.service.JwtService;
+import edu.sabanciuniv.authservice.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@RequestMapping("/auth")
+@Slf4j
 public class AuthenticationController {
 
-    private final AuthenticationService authenticationService;
 
-    public AuthenticationController(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
+    private final UserService service;
+
+    private final JwtService jwtService;
+
+    private final AuthenticationManager authenticationManager;
+
+    public AuthenticationController(UserService service, JwtService jwtService, AuthenticationManager authenticationManager) {
+
+        this.service = service;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
     @GetMapping("/")
@@ -27,28 +40,34 @@ public class AuthenticationController {
         return "Hello from auth service";
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<Token> register(@RequestBody User user) {
-        Token token = authenticationService.registerUser(user.getUsername(), user.getPassword());
-        return token != null ? ResponseEntity.ok(token) : ResponseEntity.badRequest().body(null);
+
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "Hello World! Welcome to the auth service!";
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Token> login(@RequestBody User user) {
-        Token token = authenticationService.loginUser(user.getUsername(), user.getPassword());
-        return token != null ? ResponseEntity.ok(token) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    @PostMapping("/addNewUser")
+    public User addUser(@RequestBody CreateUserRequest request) {
+        return service.createUser(request);
     }
 
-    @PostMapping("/refresh")
-    public ResponseEntity<Token> refresh(@RequestBody Token token) {
-        Token newToken = authenticationService.refreshToken(token);
-        return newToken != null ? ResponseEntity.ok(newToken) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    @PostMapping("/generateToken")
+    public String generateToken(@RequestBody AuthRequest request) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(request.username());
+        }
+        // log.info("invalid username " + request.username());
+        throw new UsernameNotFoundException("invalid username {} " + request.username());
     }
 
+    @GetMapping("/user")
+    public String getUserString() {
+        return "This is USER!";
+    }
 
-    @GetMapping("/verify")
-    public ResponseEntity<String> verifyToken(@RequestParam String token) {
-        boolean isValid = authenticationService.verifyToken(token);
-        return isValid ? ResponseEntity.ok("Token is valid") : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+    @GetMapping("/admin")
+    public String getAdminString() {
+        return "This is ADMIN!";
     }
 }
