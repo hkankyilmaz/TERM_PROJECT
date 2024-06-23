@@ -3,6 +3,7 @@ package edu.sabanciuniv.authservice.service;
 import edu.sabanciuniv.authservice.dto.CreateUserRequest;
 import edu.sabanciuniv.authservice.model.User;
 import edu.sabanciuniv.authservice.repo.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,22 +34,29 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User createUser(CreateUserRequest request) {
+    public HttpStatus createUser(CreateUserRequest request) {
 
         User newUser = new User(request.name(),
-                                request.username(),
-                                passwordEncoder.encode(request.password()),
-                                true,
-                                true,
-                                true,
-                                true,
-                                request.authorities()
-                                );
+                request.username(),
+                passwordEncoder.encode(request.password()),
+                true,
+                true,
+                true,
+                true,
+                request.authorities()
+        );
 
-        return userRepository.save(newUser);
+        try {
+            userRepository.save(newUser);
+            return HttpStatus.CREATED;
+        } catch (Exception e) {
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+
     }
 
-    public User getUserById(String id){
+    public User getUserById(String id) {
         return userRepository.getUserById(id);
     }
 

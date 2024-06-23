@@ -25,6 +25,11 @@ public class JwtService {
         return createToken(claims, userName);
     }
 
+    public String generateRefreshToken(String userName) {
+        Map<String, Object> claims = new HashMap<>();
+        return createRefreshToken(claims, userName);
+    }
+
     public Boolean validateToken(String token, UserDetails userDetails) {
         String username = extractUser(token);
         Date expirationDate = extractExpiration(token);
