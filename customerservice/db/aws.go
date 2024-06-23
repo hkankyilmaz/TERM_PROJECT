@@ -11,8 +11,8 @@ import (
 )
 
 func GetSecretValue() map[string]string {
-	secretName := "rds!db-c6b7c2c8-b77a-484d-a16f-cf4f78683090"
-	region := "us-east-1"
+	secretName := "rds!db-82a213a1-179d-4660-99a6-fb6f38c07c32"
+	region := "eu-central-1"
 
 	config, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(region))
 	if err != nil {

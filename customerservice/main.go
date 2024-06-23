@@ -3,13 +3,14 @@ package main
 import (
 	"customerservice/db"
 	"customerservice/service"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 
-	
+	fmt.Println("Starting the application...")
 
 	secret := db.GetSecretValue()
 	db := db.GetDB(secret)
