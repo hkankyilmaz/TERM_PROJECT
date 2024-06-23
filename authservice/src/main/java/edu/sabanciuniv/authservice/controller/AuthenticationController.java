@@ -58,13 +58,10 @@ public class AuthenticationController {
             log.info("invalid username " + request.username());
             throw new UsernameNotFoundException("invalid username {} " + request.username());
         }catch (Exception e){
-
             log.error("Error while generating token", e);
             throw e;
         }
-
     }
-
     @GetMapping("/user")
     public String getUserString() {
         return "This is USER!";
