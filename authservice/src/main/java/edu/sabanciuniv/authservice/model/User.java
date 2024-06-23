@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Set;
 
 
+@NoArgsConstructor
 @DynamoDBTable(tableName = "user")
 public class User implements UserDetails {
 
