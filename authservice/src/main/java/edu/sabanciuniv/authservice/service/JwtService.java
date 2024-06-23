@@ -31,6 +31,12 @@ public class JwtService {
         return userDetails.getUsername().equals(username) && !expirationDate.before(new Date());
     }
 
+    public Boolean validateRefreshToken(String token, UserDetails userDetails) {
+        String username = extractUser(token);
+        Date expirationDate = extractExpiration(token);
+        return userDetails.getUsername().equals(username) && !expirationDate.before(new Date());
+    }
+
     private Date extractExpiration(String token) {
         Claims claims = Jwts
                 .parser()
@@ -56,6 +62,16 @@ public class JwtService {
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 10000 * 60 * 2))
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    private String createRefreshToken(Map<String, Object> claims, String userName) {
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userName)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 100000 * 60 * 2))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
