@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageImpl
 import org.springframework.data.redis.cache.RedisCacheConfiguration
 import org.springframework.data.redis.cache.RedisCacheManager
 import org.springframework.data.redis.connection.RedisConnectionFactory
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.StringRedisSerializer
@@ -17,6 +19,12 @@ import org.springframework.data.redis.serializer.RedisSerializationContext.Seria
 @EnableCaching
 class RedisConfig {
 
+
+    @Bean
+    fun redisConnectionFactory(): RedisConnectionFactory {
+        return LettuceConnectionFactory(RedisStandaloneConfiguration("localhost", 6379))
+    }
+
     @Bean
     fun cacheManager(redisConnectionFactory: RedisConnectionFactory): CacheManager {
         val objectMapper = ObjectMapper().registerModule(KotlinModule.Builder().build())
@@ -24,12 +32,12 @@ class RedisConfig {
         jsonSerializer.setObjectMapper(objectMapper)
 
         val redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-            .serializeKeysWith(SerializationPair.fromSerializer(StringRedisSerializer()))
-            .serializeValuesWith(SerializationPair.fromSerializer(jsonSerializer))
+                .serializeKeysWith(SerializationPair.fromSerializer(StringRedisSerializer()))
+                .serializeValuesWith(SerializationPair.fromSerializer(jsonSerializer))
 
         return RedisCacheManager.builder(redisConnectionFactory)
-            .cacheDefaults(redisCacheConfiguration)
-            .build()
+                .cacheDefaults(redisCacheConfiguration)
+                .build()
     }
 
     @Bean
