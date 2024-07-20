@@ -1,18 +1,17 @@
 {
-  "name": "microfrontend",
+  "name": "nuxt-app",
   "private": true,
-  "version": "1.0.0",
-  "workspaces": [
-    "searhcomponent",
-    "homepage"
-  ],
+  "type": "module",
   "scripts": {
-    "build": "npm run build --workspaces",
-    "serve": "npm run preview --workspaces",
-    "stop": "kill-port --port 5000,5001"
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
   },
-  "devDependencies": {
-    "@originjs/vite-plugin-federation": "*",
-    "kill-port": "^2.0.1"
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "nuxt": "^3.12.3",
+    "vue": "latest"
   }
 }
