@@ -1,0 +1,37 @@
+@mixin flex($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@function px-to-rem($px, $base-font-size: 16px) {
+  @return $px / $base-font-size * 1rem;
+}
+
+@function rem-to-px($rem, $base-font-size: 16px) {
+  @return $rem * $base-font-size;
+}
+
+@function random-color() {
+  $red: random(256) - 1;
+  $green: random(256) - 1;
+  $blue: random(256) - 1;
+  @return rgb($red, $green, $blue);
+}
+
+$tailwind-breakpoints: (
+  "sm": 640px,
+  "md": 768px,
+  "lg": 1024px,
+  "xl": 1280px,
+  "2xl": 1536px,
+);
+
+@function tailwind-breakpoint($breakpoint) {
+  @if map-has-key($tailwind-breakpoints, $breakpoint) {
+    @return "screen and (min-width: #{map-get($tailwind-breakpoints, $breakpoint)})";
+  } @else {
+    @error "Unknown breakpoint: #{$breakpoint}";
+  }
+}
