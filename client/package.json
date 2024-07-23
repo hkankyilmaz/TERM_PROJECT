@@ -12,6 +12,10 @@
   "dependencies": {
     "lodash": "^4.17.21",
     "nuxt": "^3.12.3",
+    "pug": "^3.0.3",
     "vue": "latest"
+  },
+  "devDependencies": {
+    "sass": "^1.77.8"
   }
 }
