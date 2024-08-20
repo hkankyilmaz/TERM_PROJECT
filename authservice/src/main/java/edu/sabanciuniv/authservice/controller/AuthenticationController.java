@@ -46,10 +46,12 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<String> addUser(@RequestBody CreateUserRequest request) {
 
-        HttpStatus status = service.createUser(request);
-        String message = status == HttpStatus.CREATED ? "User created successfully" : "Error while creating user";
 
-        return new ResponseEntity<>(message, status);
+        User user = service.createUser(request);
+        if (user != null) {
+            return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>("Error while creating user", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping("/login")

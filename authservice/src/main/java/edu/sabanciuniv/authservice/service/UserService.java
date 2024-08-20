@@ -4,11 +4,14 @@ import edu.sabanciuniv.authservice.dto.CreateUserRequest;
 import edu.sabanciuniv.authservice.model.User;
 import edu.sabanciuniv.authservice.repo.UserRepository;
 import org.springframework.http.HttpStatus;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @Service
@@ -27,37 +30,29 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.getUserById(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        return user;
+
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.orElseThrow(EntityNotFoundException::new);
     }
 
-    public HttpStatus createUser(CreateUserRequest request) {
-
-        User newUser = new User(request.name(),
-                request.username(),
-                passwordEncoder.encode(request.password()),
-                true,
-                true,
-                true,
-                true,
-                request.authorities()
-        );
-
-        try {
-            userRepository.save(newUser);
-            return HttpStatus.CREATED;
-        } catch (Exception e) {
-            return HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-
-
+    public Optional<User> getByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
-    public User getUserById(String id) {
-        return userRepository.getUserById(id);
+    public User createUser(CreateUserRequest request) {
+
+        User newUser = User.builder()
+                .name(request.name())
+                .username(request.username())
+                .password(passwordEncoder.encode(request.password()))
+                .authorities(request.authorities())
+                .accountNonExpired(true)
+                .credentialsNonExpired(true)
+                .isEnabled(true)
+                .accountNonLocked(true)
+                .build();
+
+        return userRepository.save(newUser);
     }
 
 
