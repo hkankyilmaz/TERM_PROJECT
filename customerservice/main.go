@@ -12,8 +12,7 @@ func main() {
 
 	fmt.Println("Starting the application...")
 
-	secret := db.GetSecretValue()
-	db := db.GetDB(secret)
+	db := db.GetDB()
 
 	a := service.GetApp(db)
 

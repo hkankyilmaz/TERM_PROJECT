@@ -21,6 +21,7 @@ func InsertCustomer(d *PostgresDB , customer Customer) (int, *Customer, error) {
 	stmt := `INSERT INTO customers (name, email, address) VALUES ($1, $2, $3) RETURNING id`
 	err := d.DB.QueryRow(stmt, customer.Name, customer.Email, customer.Address).Scan(&customer.ID)
 	if err != nil {
+	    fmt.Println(err)
 		return http.StatusInternalServerError, nil, err
 	}
 

@@ -14,14 +14,14 @@ type PostgresDB struct {
 	DB *sqlx.DB
 }
 
-func GetDB(secrets map[string]string) *PostgresDB {
-	db := createDB(secrets)
+func GetDB() *PostgresDB {
+	db := createDB()
 	return &PostgresDB{
 		DB: db,
 	}
 }
 
-func createDB(secrets map[string]string) *sqlx.DB {
+func createDB() *sqlx.DB {
 
 	if err := godotenv.Load(); err != nil {
 		fmt.Println("Error loading .env file:", err)
@@ -30,9 +30,11 @@ func createDB(secrets map[string]string) *sqlx.DB {
 
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
 
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s password=%s",
-		dbHost, dbPort, secrets["username"], secrets["password"])
+		dbHost, dbPort, dbUser , dbPassword)
 
 	db, err := sqlx.Connect("postgres", connectionString)
 	if err != nil {
@@ -47,6 +49,6 @@ func createDB(secrets map[string]string) *sqlx.DB {
 	    address VARCHAR(255)
 	);
 	`
-	_, err = db.Exec(createTableSQL)
+	db.Exec(createTableSQL)
 	return db
 }
