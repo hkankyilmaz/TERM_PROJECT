@@ -1,0 +1,33 @@
+{
+  "name": "malwa-rec-case-backend",
+  "version": "1.0.0",
+  "description": "This server authored for rec case for malwa",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hkankyilmaz/malwa-rec-case.git"
+  },
+  "author": "Hakan KARAYILMAZ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hkankyilmaz/malwa-rec-case/issues"
+  },
+  "homepage": "https://github.com/hkankyilmaz/malwa-rec-case#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "firebase": "^10.13.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.2.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^2.0.22"
+  }
+}
