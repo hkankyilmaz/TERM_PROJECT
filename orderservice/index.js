@@ -3,8 +3,13 @@ import cors from "cors";
 import 'dotenv/config';
 import { initializeApp } from "firebase/app";
 
+import { PubSub } from '@google-cloud/pubsub';
+import { Buffer } from 'buffer';
+
 
 const app = express();
+
+const pubSubClient = new PubSub();
 
 // regular middleware
 app.use(express.json());
@@ -51,9 +56,17 @@ app.post("/orders", async (req, res) => {
     const { orderDetails } = req.body;
 
     try {
+
+        const topicName = 'order-topic';
+        const message = { message: 'Selam' };
+        const dataBuffer = Buffer.from(JSON.stringify(message));
+
+
         await addDoc(dbRef, {
             orderDetails,
         });
+
+        const messageId = await pubSubClient.topic(topicName).publish(dataBuffer);
 
         res.status(200).json({ message: "Order created successfully" });
     }
