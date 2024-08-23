@@ -37,6 +37,12 @@ const db = getFirestore(firebaseApp);
 const dbRef = collection(db, "orders");
 
 
+app.get("/", (req, res) => {
+    res.status(200).json({ message: "Welcome to the Order Service" });
+}
+);
+
+
 app.get("/orders", async (req, res) => {
     try {
         const querySnapshot = await getDocs(dbRef);
@@ -58,7 +64,7 @@ app.post("/orders", async (req, res) => {
     try {
 
         const topicName = 'order-topic';
-        const message = { message: 'Selam' };
+        const message = { email: 'hkankyilmazz@gmail.com', orderDetails: "order details" };
         const dataBuffer = Buffer.from(JSON.stringify(message));
 
 
