@@ -12,7 +12,7 @@ const pubSubClient = new PubSub();
 // regular middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors());
 
 
 const firebaseConfig = {
@@ -38,8 +38,7 @@ async function listenForMessages() {
     const subscription = pubSubClient.subscription(subscriptionName);
 
     const messageHandler = async (message) => {
-        console.log(`Received message: ${message.id}`);
-        console.log(`Data: ${message.data}`);
+
 
         const _data = JSON.parse(Buffer.from(message.data, 'base64').toString());
 
@@ -50,8 +49,13 @@ async function listenForMessages() {
             message: {
                 subject: "Order Notification",
                 html: `
-                <p><strong>Your Orders Detail:</strong> ${_data.orderDetails}</p>
-            
+                <p><strong> Hey ${_data.name}, Your Order Details ; </strong> </p>
+                ${_data.orders.map((order) => (
+                    `<p> ${order.productName} - ${order.productPrice} $</p>
+                        <p> ${order.productDescription} </p>`
+
+                ))}
+                <p><strong> Total Price : ${_data.totalPrice} </strong></p>
               `,
             },
         });
