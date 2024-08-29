@@ -2,7 +2,7 @@ import express from 'express';
 import cors from "cors";
 import 'dotenv/config';
 import { initializeApp } from "firebase/app";
-
+import { getFirestore, collection, addDoc, getDocs, doc } from "firebase/firestore";
 import { PubSub } from '@google-cloud/pubsub';
 import { Buffer } from 'buffer';
 
@@ -14,11 +14,10 @@ const pubSubClient = new PubSub();
 // regular middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors());
 
 
 
-import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
@@ -59,20 +58,24 @@ app.get("/orders", async (req, res) => {
 
 app.post("/orders", async (req, res) => {
 
-    const { orderDetails } = req.body;
+    const { orders, totalPrice, email, name } = req.body;
 
     try {
 
         const topicName = 'order-topic';
-        const message = { email: 'hkankyilmazz@gmail.com', orderDetails: "order details" };
+        const message = { orders, totalPrice, email, name };
         const dataBuffer = Buffer.from(JSON.stringify(message));
 
 
         await addDoc(dbRef, {
-            orderDetails,
+            orders,
+            totalPrice,
+            email,
+            name
         });
 
         const messageId = await pubSubClient.topic(topicName).publish(dataBuffer);
+        console.log(`Message ${messageId} published.`);
 
         res.status(200).json({ message: "Order created successfully" });
     }

@@ -1,5 +1,5 @@
 import { app } from '../util/dbConnect.js';
-import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes, getStorage } from "firebase/storage";
 
 
@@ -24,10 +24,10 @@ const getAllProducts = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-  const { name, price, description } = req.body;
+  const { productName, productPrice, productDescription } = req.body;
   const image = req.file;
 
-  console.log(name, price, description);
+  console.log(productName, productPrice, productDescription);
 
   try {
     if (!image) {
@@ -39,9 +39,9 @@ const createProduct = async (req, res) => {
     const imageUrl = await getDownloadURL(imageRef);
 
     await addDoc(dbRef, {
-      name,
-      price,
-      description,
+      productName,
+      productPrice,
+      productDescription,
       imageUrl,
     });
 
@@ -54,24 +54,24 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
 
-  const { id, name, price, description } = req.body;
+  const { id, productName, productPrice, productDescription } = req.body;
   const image = req.file;
 
   try {
     if (!image) {
       await updateDoc(doc(db, "products", id), {
-        name,
-        price,
-        description,
+        productName,
+        productPrice,
+        productDescription,
       });
     } else {
       const imageRef = ref(storage, `images/${image.originalname}`);
       await uploadBytes(imageRef, image.buffer);
       const imageUrl = await getDownloadURL(imageRef);
       await updateDoc(doc(db, "products", id), {
-        name,
-        price,
-        description,
+        productName,
+        productPrice,
+        productDescription,
         imageUrl,
       });
     }

@@ -39,6 +39,17 @@ func (a *App) GetHandler(c *gin.Context) {
 
 }
 
+func (a *App) GetByEmailHandler(c *gin.Context) {
+	status, customer, err := getCustomerViaEmail(a.db, c)
+	if err != nil {
+		c.JSON(status, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(status, customer)
+
+}
+
 func (a *App) PutHandler(c *gin.Context) {
 	status, customer, err := updateCustomer(a.db, c)
 	if err != nil {

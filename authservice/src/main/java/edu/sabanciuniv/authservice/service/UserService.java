@@ -46,6 +46,8 @@ public class UserService implements UserDetailsService {
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))
                 .authorities(request.authorities())
+                .email(request.email())
+                .authorities(request.authorities())
                 .accountNonExpired(true)
                 .credentialsNonExpired(true)
                 .isEnabled(true)

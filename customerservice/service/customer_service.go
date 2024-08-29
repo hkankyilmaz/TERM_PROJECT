@@ -41,6 +41,14 @@ func getCustomer(d *db.PostgresDB, c *gin.Context) (int, *db.Customer, error) {
 	return statusCode, customer, err
 }
 
+func getCustomerViaEmail(d *db.PostgresDB, c *gin.Context) (int, *db.Customer, error) {
+	email := c.Param("email")
+
+	statusCode, customer, err := db.GetCustomerByEmail(d, email)
+
+	return statusCode, customer, err
+}
+
 func updateCustomer(d *db.PostgresDB, c *gin.Context) (int, *db.Customer, error) {
 	customerID := c.Param("customerId")
 	id, err := strconv.Atoi(customerID)

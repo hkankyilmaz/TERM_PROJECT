@@ -13,7 +13,7 @@ const app = express();
 // regular middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors());
 
 // routes
 app.use("/product", upload.single('image'), productRoute);

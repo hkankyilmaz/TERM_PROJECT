@@ -46,12 +46,17 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<String> addUser(@RequestBody CreateUserRequest request) {
 
-
-        User user = service.createUser(request);
-        if (user != null) {
-            return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+        try {
+            User user = service.createUser(request);
+            if (user != null) {
+                return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>("Error while creating user", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error while creating user", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>("Error while creating user", HttpStatus.INTERNAL_SERVER_ERROR);
+
+
     }
 
     @PostMapping("/login")
@@ -73,6 +78,10 @@ public class AuthenticationController {
                         .token(token)
                         .refreshToken(refToken)
                         .message(message)
+                        .name(userService.getByUsername(request.username()).get().getName())
+                        .email(userService.getByUsername(request.username()).get().getEmail())
+                        .role(userService.getByUsername(request.username()).get().getAuthorities().iterator().next())
+                        .username(request.username())
                         .build();
 
                 return new ResponseEntity<>(authResponse, HttpStatus.CREATED);

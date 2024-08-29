@@ -42,6 +42,8 @@ async function listenForMessages() {
 
         const _data = JSON.parse(Buffer.from(message.data, 'base64').toString());
 
+        console.log(_data);
+
 
 
         await addDoc(dbRef, {
@@ -50,13 +52,13 @@ async function listenForMessages() {
                 subject: "Order Notification",
                 html: `
                 <p><strong> Hey ${_data.name}, Your Order Details ; </strong> </p>
-                ${_data.orders.map((order) => (
+                ${_data.orders?.map((order) => (
                     `<p> ${order.productName} - ${order.productPrice} $</p>
                         <p> ${order.productDescription} </p>`
 
                 ))}
                 <p><strong> Total Price : ${_data.totalPrice} </strong></p>
-              `,
+              `
             },
         });
         message.ack();

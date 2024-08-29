@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Set;
 
-
 @Data
 @Entity
 @Table(name = "userss")
@@ -21,18 +20,31 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
+    @Column(unique = true, name="username")
     private String username;
+
     private String password;
+
+    @Column(unique = true, name="email")
+    private String email;
 
     private boolean accountNonExpired;
     private boolean isEnabled;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "authorities", joinColumns = @JoinColumn(name = "user_id"))
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "authorities", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Set<Role> authorities;
+
+    @Override
+    public Set<Role> getAuthorities() {
+        return authorities;
+    }
+
 }

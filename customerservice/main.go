@@ -20,6 +20,7 @@ func main() {
 
 	r.POST("/customers", a.PostHandler)
 	r.GET("/customers/:customerId", a.GetHandler)
+	r.GET("/customers/email/:email", a.GetByEmailHandler)
 	r.PUT("/customers/:customerId", a.PutHandler)
 	r.DELETE("/customers/:customerId", a.DeleteHandler)
 

@@ -47,6 +47,23 @@ func GetCustomer(d *PostgresDB, id int) (int, *Customer, error) {
 	return http.StatusOK, &customer, nil
 }
 
+func GetCustomerByEmail(d *PostgresDB, email string) (int, *Customer, error) {
+	stmt := `SELECT id, name, email, address FROM customers WHERE email = $1`
+	var customer Customer
+	err := d.DB.QueryRow(stmt, email).Scan(&customer.ID, &customer.Name, &customer.Email, &customer.Address)
+
+	if err == sql.ErrNoRows {
+		return http.StatusNotFound, nil, err
+	}
+
+	if err != nil {
+		return http.StatusInternalServerError, nil, err
+	}
+
+	return http.StatusOK, &customer, nil
+}
+
+
 
 func UpdateCustomer(d *PostgresDB, id int, customer Customer) (int, *Customer, error) {
 	
