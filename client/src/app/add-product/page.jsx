@@ -24,7 +24,7 @@ function AddProduct() {
       _formData.append("image", formData.image[0]);
 
       const res = await axios.post(
-        "http://localhost:8080/product/create",
+        "https://productservice-u5r5vyqfka-ew.a.run.app/product/create",
         _formData
       );
       reset();
