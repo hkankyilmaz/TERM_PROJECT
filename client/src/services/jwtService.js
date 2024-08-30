@@ -4,17 +4,16 @@ const c = cookies()
 
 export const removeTokens = () => {
 
-    return new Promise((resolve, reject) => {
 
-        c.delete('token_hemenal')
-        c.delete('ref_token_hemenal')
-        c.delete('user_name_hemenal')
-        c.delete('user_username_hemenal')
-        c.delete('user_email_hemenal')
-        c.delete('user_role_hemenal')
-        resolve()
+    c.delete('token_hemenal')
+    c.delete('ref_token_hemenal')
+    c.delete('user_name_hemenal')
+    c.delete('user_username_hemenal')
+    c.delete('user_email_hemenal')
+    c.delete('user_role_hemenal')
 
-    })
+
+
 }
 
 export const getTokens = () => {
