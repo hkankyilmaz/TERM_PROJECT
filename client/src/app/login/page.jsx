@@ -7,6 +7,7 @@ import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { login } from "@/services/authService";
+import Link from "next/link";
 function LogIn() {
   const {
     register,
@@ -93,7 +94,14 @@ function LogIn() {
         >
           Submit
         </button>
+        <div>
+          Don't have an account?
+          <Link className="underline text-blue-500 ml-1" href={"/sign-up"}>
+            Register
+          </Link>
+        </div>
       </form>
+      <div> </div>
       <Toaster />
     </div>
   );

@@ -6,6 +6,7 @@ import { useMutation, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster, toast } from "react-hot-toast";
 import { authRegister } from "@/services/authService";
 import { customerRegister } from "@/services/customerService";
+import Link from "next/link";
 function SignUp() {
   const {
     register,
@@ -152,6 +153,13 @@ function SignUp() {
         >
           Submit
         </button>
+        <div>
+          {" "}
+          Already have an account?
+          <Link className="underline text-blue-500 ml-1" href={"/login"}>
+            Login
+          </Link>{" "}
+        </div>
       </form>
       <Toaster />
     </div>
