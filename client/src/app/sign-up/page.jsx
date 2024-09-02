@@ -154,11 +154,10 @@ function SignUp() {
           Submit
         </button>
         <div>
-          {" "}
           Already have an account?
           <Link className="underline text-blue-500 ml-1" href={"/login"}>
             Login
-          </Link>{" "}
+          </Link>
         </div>
       </form>
       <Toaster />

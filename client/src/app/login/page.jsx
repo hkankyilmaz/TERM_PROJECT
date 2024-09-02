@@ -101,7 +101,6 @@ function LogIn() {
           </Link>
         </div>
       </form>
-
       <Toaster />
     </div>
   );
