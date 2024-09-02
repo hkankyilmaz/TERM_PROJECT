@@ -95,7 +95,7 @@ function LogIn() {
           Submit
         </button>
         <div>
-          Don't have an account?
+          Dont have an account?
           <Link className="underline text-blue-500 ml-1" href={"/sign-up"}>
             Register
           </Link>
